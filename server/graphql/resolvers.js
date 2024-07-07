@@ -28,10 +28,6 @@ const resolvers={
             const [rows]=await pool.query('SELECT * FROM appointment');
             return rows;
         },
-        // appointment: async(_,{})=>{
-        //     // const [rows]=await pool.query('SELECT * FROM doctor WHERE id= ?',[id])
-        //     // return rows[0]
-        // },
         DoctorFromSpeciality: async(_,{name,limit,offset})=>{
             const [rows]=await pool.query('SELECT DISTINCT d.* FROM doctor d JOIN doctor_specialisation ds ON d.id = ds.d_id JOIN specialisation s ON ds.s_id=s.id where s.name LIKE ? LIMIT ? OFFSET ?', [`%${name}%`, limit, offset]);
             return rows;
@@ -124,9 +120,22 @@ const resolvers={
             return {
                 id:user[0].id, name:user[0].name, email, contact:user[0].contact,token
             };
-          }  
-    }
+          },
+          addAppointment: async(_,{d_id,p_id,slot,success})=>{
+            const [rows]=await pool.query('INSERT INTO appointment (d_id,p_id,slot,success) VALUES (?, ?,?,?)',[d_id,p_id,slot,success])
+            return{
+              id:rows.insertId,
+              d_id,p_id,slot,success
+            }
+        },
+        cancelAppointment: async(_,{id})=>{
+          const [rows]=await pool.query('UPDATE appointment SET success=false WHERE id=?',[id]);
+          return {
+            id
+          }
+        }
 
+    }
 }
 
 export default resolvers;

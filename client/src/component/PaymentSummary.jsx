@@ -2,29 +2,30 @@ import React,{useState,useEffect} from 'react';
 import { useParams } from 'react-router-dom';
 import {useDispatch,useSelector} from 'react-redux'
 import { useNavigate } from 'react-router-dom';
-import { GET_DOCTOR } from '../utils/queries';
+import { ADD_APPOINTMENT, GET_DOCTOR } from '../utils/queries';
 import { client } from '..';
-import { setDoctorId, setDoctorName, setFee } from '../redux/appointmentSlice';
+import { setDoctorId, setDoctorImg, setDoctorName, setFee } from '../redux/appointmentSlice';
+
+
 
 const PaymentSummary = () => {
   const navigate=useNavigate();
   const {id}=useParams();
-  console.log(id)
   const [doctor, setDoctor] = useState(null);
+  const [appointment,setAppointment]=useState(null);
   const dispatch=useDispatch();
-  const timeSlot=useSelector(store=>store.appointment.time)
+  const timeSlot=useSelector(store=>store.appointment.time);
+
+  const userData=useSelector(state=>state.user?.user);
 
   useEffect(() => {
-    client.query({
-      query: GET_DOCTOR,
-      variables: { id: parseInt(id) },
-    })
+      client.query({
+        query: GET_DOCTOR,
+        variables: { id: parseInt(id) },
+      })
       .then(result => {
         if (result.data && result.data.doctor) {
           setDoctor(result.data.doctor);
-          dispatch(setDoctorId(parseInt(id)));
-          dispatch(setDoctorName(doctor.name));
-          dispatch(setFee(doctor.fee));
         }
       })
       .catch(error => {
@@ -37,8 +38,33 @@ const PaymentSummary = () => {
     location: 'HSR Layout',
   };
 
-  const handleClick=()=>{
-    navigate('/payment')
+  const handleClick=async()=>{
+
+    await client.mutate({
+      mutation:ADD_APPOINTMENT,
+      variables:{d_id:parseInt(id),p_id:parseInt(userData.id),slot:timeSlot,success:true}
+    })
+    .then((result)=>{
+      setAppointment(result.data.addAppointment)
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
+    
+    const book={
+      doctorId:parseInt(id),
+      doctorName:doctor.name,
+      fee:doctor.fee,
+      image_url:doctor.image_url,
+      appointmentNumber:appointment.id,
+    }
+
+    localStorage.setItem('book',JSON.stringify(book));
+    dispatch(setDoctorId(parseInt(id)));
+    dispatch(setDoctorName(doctor.name));
+    dispatch(setFee(doctor.fee));
+    dispatch(setDoctorImg(doctor.image_url));
+    navigate('/appointment/status')
   }
 
   return (

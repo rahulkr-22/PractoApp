@@ -41,9 +41,8 @@ const typeDefs = gql`
     id:ID!
     d_id:ID!
     p_id:ID!
-    clinic_id:ID!
-    slot:Int!
-    success:Boolean
+    slot:String!
+    success:Boolean!
   }
 
   type PaymentIntentResponse {
@@ -66,7 +65,8 @@ const typeDefs = gql`
     createPaymentIntent(amount: Int!): PaymentIntentResponse
     registerUser(name:String!,email:String!,contact:String!,password:String!): User
     loginUser(email:String!,password:String!): User
-    addAppointment(d_id:Int!,p_id:Int!,slot:Int!,status:String!):Appointment
+    addAppointment(d_id:ID!,p_id:ID!,slot:String!,success:Boolean!):Appointment
+    cancelAppointment(id:ID!): Appointment
   }
 
 `;

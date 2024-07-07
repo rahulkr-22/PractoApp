@@ -61,3 +61,23 @@ export const CREATE_PAYMENT_INTENT = gql`
     }
   }
 `;
+
+export const ADD_APPOINTMENT=gql`
+mutation($d_id: ID!, $p_id: ID!, $slot: String!, $success: Boolean!){
+    addAppointment(d_id: $d_id, p_id: $p_id, slot: $slot, success: $success) {
+        id
+        p_id
+        d_id
+        slot
+        success
+    }
+}
+`
+
+export const CANCEL_APPOINTMENT=gql`
+mutation($id: ID!){
+  cancelAppointment(id: $id) {
+    id
+  }
+}
+`
