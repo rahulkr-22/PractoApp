@@ -83,9 +83,17 @@ const resolvers={
               [name, email, contact, hashedPassword]
             );
 
+            const payload = {
+              id: newUser.insertId,
+            };
+            
+            const token = jwt.sign(payload, process.env.JWT_SECRET, {
+              expiresIn: "24h",
+            });
+
             return {
               id: newUser.insertId,
-              name, email, contact
+              name, email, contact,token
             };
           },
           loginUser: async (_, { email, password}) => {
