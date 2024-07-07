@@ -30,3 +30,26 @@ query getSpecialities($name: String!){
   }
 }
 `
+export const SEARCH_DOCTORS=gql`
+query getDoctorBySpec($name: String!, $limit: Int!, $offset: Int!){
+  DoctorFromSpeciality(name: $name, limit: $limit, offset: $offset) {
+      id
+      name
+      fee 
+      experience
+      image_url
+  }
+}
+`
+
+export const GET_DOCTOR=gql`
+  query DoctorById($id:ID!){
+    doctor(id:$id){
+      id
+      name
+      fee
+      experience
+      image_url
+    }
+  }
+`
