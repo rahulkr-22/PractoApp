@@ -4,10 +4,12 @@ import {useDispatch,useSelector} from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import { GET_DOCTOR } from '../utils/queries';
 import { client } from '..';
+import { setDoctorId, setDoctorName, setFee } from '../redux/appointmentSlice';
 
 const PaymentSummary = () => {
   const navigate=useNavigate();
   const {id}=useParams();
+  console.log(id)
   const [doctor, setDoctor] = useState(null);
   const dispatch=useDispatch();
   const timeSlot=useSelector(store=>store.appointment.time)
@@ -20,6 +22,9 @@ const PaymentSummary = () => {
       .then(result => {
         if (result.data && result.data.doctor) {
           setDoctor(result.data.doctor);
+          dispatch(setDoctorId(parseInt(id)));
+          dispatch(setDoctorName(doctor.name));
+          dispatch(setFee(doctor.fee));
         }
       })
       .catch(error => {
@@ -27,14 +32,13 @@ const PaymentSummary = () => {
       });
   }, [id]);
 
-
   const clinicInfo = {
     name: 'Relief Clinic',
     location: 'HSR Layout',
   };
 
   const handleClick=()=>{
-    navigate('/appointment')
+    navigate('/payment')
   }
 
   return (

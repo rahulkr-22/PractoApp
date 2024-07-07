@@ -8,6 +8,9 @@ import Header from './component/Header';
 import DoctorProfile from './component/DoctorProfile';
 import BookSlot from './component/BookSlot';
 import PaymentSummary from './component/PaymentSummary';
+import Success from './component/Success';
+import Failed from './component/Failed';
+import Payment from './component/Payment';
 
 function App() {
   return (
@@ -18,6 +21,9 @@ function App() {
       <Route path='/doctor/:id' element={<DoctorProfile/>}/>
       <Route path='/appointment/:id' element={<BookSlot/>}/>
       <Route path='/payment-summary/:id' element={<PaymentSummary/>}/>
+      <Route path='/payment' element={<Payment/>}/>
+      <Route path='/payment/success' element={<Success/>}/>
+      <Route path='/payment/failed' element={<Failed/>}/>
     </Routes>
   );
 }
