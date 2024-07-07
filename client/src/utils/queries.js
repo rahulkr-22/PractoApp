@@ -21,3 +21,12 @@ export const REGISTER_MUTATION = gql`
     token
   }
 }`;
+
+export const SEARCH_SPECIALITY=gql`
+query getSpecialities($name: String!){
+  specialities(name: $name) {
+    id
+    name
+  }
+}
+`
