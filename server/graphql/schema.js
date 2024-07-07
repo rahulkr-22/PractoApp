@@ -50,18 +50,6 @@ const typeDefs = gql`
     clientSecret: String
   }
 
-  input RegisterInput{
-    name:String!,
-    email:String!,
-    contact:String!,
-    password:String!,
-  }
-
-  input LoginInput{
-    email:String!,
-    password:String!
-  }
-
 
   type Query { 
     hello:String
@@ -76,8 +64,8 @@ const typeDefs = gql`
 
   type Mutation {
     createPaymentIntent(amount: Int!): PaymentIntentResponse
-    registerUser(input: RegisterInput): User
-    loginUser(input:LoginInput): User
+    registerUser(name:String!,email:String!,contact:String!,password:String!): User
+    loginUser(email:String!,password:String!): User
     addAppointment(d_id:Int!,p_id:Int!,slot:Int!,status:String!):Appointment
   }
 

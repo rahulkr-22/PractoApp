@@ -1,10 +1,12 @@
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs'
+import bcryptjs from 'bcryptjs'
 import pool from './db.js'
-
+import dotenv from 'dotenv'
 import Stripe from 'stripe';
 
-const stripe = new Stripe('sk_test_51NlOhRSEekknxcXvnjXa5pphT4YJy4iIjPRQaSJtBBEA6iKhQamtf08jVbLcU2MoJueS9R89mu6jXDC4MQPAf6dj000iOwnzTD');
+
+dotenv.config();
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const resolvers={
 
@@ -57,6 +59,64 @@ const resolvers={
               throw new Error('Failed to create payment intent');
             }
           },
+          registerUser: async (_,{ name, email,contact, password}) => {
+            const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            
+            if(name.length<3){
+                throw new Error("Name should have atleast 3 characters")
+            }
+            if (!email.match(regex)) {
+              throw new Error("Email is not valid.");
+            } 
+            if(contact.length!=10){
+                throw new Error("Mobile Number is not valid.")
+            }
+      
+            const [user] = await pool.query(`SELECT p.email FROM patient p WHERE p.email=?`,[email]);
+            if (user.length > 0) {
+              throw new Error("User already exists");
+            }
+            const hashedPassword = await bcryptjs.hash(password, 10);
+      
+            const [newUser] = await pool.query(
+              `INSERT INTO patient (name,email,contact,password) VALUES (?, ?, ?,?);`,
+              [name, email, contact, hashedPassword]
+            );
+
+            return {
+              id: newUser.insertId,
+              name, email, contact
+            };
+          },
+          loginUser: async (_, { email, password}) => {
+
+            const [user] = await pool.query(`SELECT * FROM patient p WHERE p.email=?`,[email]);
+
+            if (user.length == 0) {
+              throw new Error("you have not registered.");
+            }
+
+            const isPasswordMatched = await bcryptjs.compare(
+              password,
+              user[0].password
+            );
+      
+            if (!isPasswordMatched) {
+              throw new Error("wrong password");
+            }
+
+            const payload = {
+              id: user[0].id,
+            };
+            
+            const token = jwt.sign(payload, process.env.JWT_SECRET, {
+              expiresIn: "24h",
+            });
+      
+            return {
+                id:user[0].id, name:user[0].name, email, contact:user[0].contact,token
+            };
+          }
           
     }
 
