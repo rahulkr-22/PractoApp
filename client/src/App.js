@@ -7,6 +7,7 @@ import DoctorList from './component/DoctorList';
 import Header from './component/Header';
 import DoctorProfile from './component/DoctorProfile';
 import BookSlot from './component/BookSlot';
+import PaymentSummary from './component/PaymentSummary';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Route path='/search/:speciality' element={<DoctorList/>}/>
       <Route path='/doctor/:id' element={<DoctorProfile/>}/>
       <Route path='/appointment/:id' element={<BookSlot/>}/>
+      <Route path='/payment-summary/:id' element={<PaymentSummary/>}/>
     </Routes>
   );
 }
