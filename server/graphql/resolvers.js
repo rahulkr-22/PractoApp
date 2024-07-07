@@ -44,7 +44,7 @@ const resolvers={
     },
 
     Mutation:{
-        createPaymentIntent: async (_, { amount }) => {
+          createPaymentIntent: async (_, { amount }) => {
             try {
               const paymentIntent = await stripe.paymentIntents.create({
                 amount,
@@ -116,8 +116,7 @@ const resolvers={
             return {
                 id:user[0].id, name:user[0].name, email, contact:user[0].contact,token
             };
-          }
-          
+          }  
     }
 
 }
