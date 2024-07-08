@@ -53,6 +53,7 @@ const typeDefs = gql`
     id:ID!
     d_id:ID!
     p_id:ID!
+    patientName:String!
     speciality:String!
     rating:Int!
     visitReason:String!
@@ -81,7 +82,7 @@ const typeDefs = gql`
     loginUser(email:String!,password:String!): User
     addAppointment(d_id:ID!,p_id:ID!,slot:String!,success:Boolean!):Appointment
     cancelAppointment(id:ID!): Appointment
-    addReview(d_id:ID!,p_id:ID!,speciality:String!,rating:Int!,visitReason:String!,content:String!):Review
+    addReview(d_id:ID!,p_id:ID!,patientName:String!,speciality:String!,rating:Int!,visitReason:String!,content:String!):Review
   }
 
 `;

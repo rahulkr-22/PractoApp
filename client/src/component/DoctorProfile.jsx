@@ -3,7 +3,19 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { client } from '..';
 import { DOCTOR_SPECIALITY, GET_CLINIC, GET_DOCTOR, GET_REVIEW } from '../utils/queries';
+import { IoStarOutline } from "react-icons/io5";
 import Header from './Header';
+
+const Star = ({ count }) => {
+  const stars = Array(count).fill(null);
+  return (
+    <div className="flex flex-row text-yellow-500">
+      {stars.map((_, index) => (
+        <IoStarOutline/>
+      ))}
+    </div>
+  );
+};
 
 const DoctorProfile = () => {
   const dispatch = useDispatch();
@@ -101,12 +113,13 @@ const DoctorProfile = () => {
     setShowProperty2('w-1/2 p-3 bg-blue-50 hover:cursor-pointer')
   }
   const handleReviews=()=>{
-    setIsInfo(false);
+    setIsInfo(false)
+    
     setShowProperty2('w-1/2 p-3 bg-white hover:cursor-pointer')
     setShowProperty1('w-1/2 p-3 bg-blue-50 hover:cursor-pointer')
   }
 
-
+  // console.log(reviews)
   return (
     <div>
       <Header />
@@ -146,14 +159,24 @@ const DoctorProfile = () => {
         <div onClick={handleInfo} className={showProperty1}>Info</div>
         <div onClick={handleReviews} className={showProperty2}>Reviews</div>
       </div>
-      {isInfo?
+      {isInfo===true?
       (<div className="flex justify-center w-[30%] shadow-md rounded-sm bg-white p-10">
-            <div></div>
-            <div></div>
+            <div>fgdfh</div>
+            <div>wetg</div>
             <div></div>
         </div>)
       :( <div className="flex justify-center w-[30%] shadow-md rounded-sm bg-white p-10">
-            reviews
+            <ul className='divide-y-2 '>
+              {(reviews && reviews.map((review)=>{
+                return (
+                <li className='p-2 my-2'>
+                  {console.log(review)}
+                  <p className='flex flex-row items-center gap-3 my-4'>{review.patientName} <Star count={review.rating}/> </p>
+                  <p className='font-semibold text-gray-600 mb-2'>{review.visitReason}</p>
+                  <p className='font-gray-400 '>{review.content}</p>
+                  </li>)
+              }))}
+            </ul>
         </div>)}
         </div>
     </div>

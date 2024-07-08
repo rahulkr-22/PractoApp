@@ -51,7 +51,7 @@ const resolvers={
           return rows;
         },
         doctorReview: async(_,{d_id,speciality})=>{
-          const [rows]=await pool.query('SELECT rating, visitReason, content FROM review WHERE review.d_id=? AND review.speciality=?',[d_id,speciality]);
+          const [rows]=await pool.query('SELECT p_id,rating,patientName, visitReason, content FROM review WHERE review.d_id=? AND review.speciality=?',[d_id,speciality]);
           return rows;
         }
 
@@ -152,11 +152,11 @@ const resolvers={
             id
           }
         },
-        addReview: async(_,{d_id,p_id,speciality,rating,visitReason,content})=>{
-          const [rows]=await pool.query('INSERT INTO review (d_id,p_id,speciality,rating,visitReason,content) VALUES (?,?,?,?, ?,?)',[d_id,p_id,speciality,rating,visitReason,content])
+        addReview: async(_,{d_id,p_id,patientName,speciality,rating,visitReason,content})=>{
+          const [rows]=await pool.query('INSERT INTO review (d_id,p_id,patientName,speciality,rating,visitReason,content) VALUES (?,?,?,?,?, ?,?)',[d_id,p_id,patientName,speciality,rating,visitReason,content])
           return{
             id:rows.insertId,
-            d_id,p_id,speciality,
+            d_id,p_id,patientName,speciality,
             rating,visitReason,content
           }         
         }

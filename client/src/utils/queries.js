@@ -114,6 +114,7 @@ export const GET_REVIEW=gql`
 query doctorReview($d_id: ID!, $speciality: String!){
   doctorReview(d_id: $d_id, speciality: $speciality) {
     rating,
+    patientName,
     content,
     visitReason
   }
@@ -126,6 +127,14 @@ query getClinic($d_id: ID!){
       name,
       address,
       city
+  }
+}
+`
+
+export const GET_USER=gql`
+query user($id: ID!){
+  user(id: $id) {
+    name
   }
 }
 `
