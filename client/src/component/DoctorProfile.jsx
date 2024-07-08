@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { client } from '..';
-import { DOCTOR_SPECIALITY, GET_DOCTOR } from '../utils/queries';
+import { DOCTOR_SPECIALITY, GET_CLINIC, GET_DOCTOR, GET_REVIEW } from '../utils/queries';
 import Header from './Header';
 
 const DoctorProfile = () => {
@@ -11,8 +11,13 @@ const DoctorProfile = () => {
   const navigate = useNavigate();
   const [doctor, setDoctor] = useState(null);
   const [specialities, setSpecialities] = useState([]);
+  const [clinic,setClinic]=useState(null);
+  const [reviews,setReviews]=useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [isInfo,setIsInfo]=useState(true);
+  const [showProperty1,setShowProperty1]=useState('w-1/2 p-3 bg-white hover:cursor-pointer')
+  const [showProperty2,setShowProperty2]=useState('w-1/2 p-3 bg-blue-50 hover:cursor-pointer')
+  const speciality=localStorage.getItem('speciality');
   useEffect(() => {
     if (id) {
       const doctorId = parseInt(id);
@@ -46,7 +51,39 @@ const DoctorProfile = () => {
           console.error('Error fetching doctor speciality:', error);
           setLoading(false);
         });
-    } else {
+
+      client.query({
+        query: GET_CLINIC,
+        variables: { d_id: doctorId },
+      })
+        .then(result => {
+          if (result.data && result.data.doctorClinic) {
+            setClinic(result.data.doctorClinic.map(clinic => clinic));
+          }
+          setLoading(false);
+        })
+        .catch(error => {
+          console.error('Error fetching clinic details:', error);
+          setLoading(false);
+        });
+
+      client.query({
+        query: GET_REVIEW,
+        variables: { d_id: doctorId,speciality },
+      })
+        .then(result => {
+          if (result.data && result.data.doctorReview) {
+            setReviews(result.data.doctorReview.map(review => review));
+          }
+          setLoading(false);
+        })
+        .catch(error => {
+          console.error('Error fetching reviews:', error);
+          setLoading(false);
+        });
+
+    } 
+    else {
       setLoading(false);
     }
   }, [id]);
@@ -58,13 +95,25 @@ const DoctorProfile = () => {
   if (loading) {
     return <p className="text-center mt-8">Loading...</p>;
   }
+  const handleInfo=()=>{
+    setIsInfo(true);
+    setShowProperty1('w-1/2 p-3 bg-white hover:cursor-pointer')
+    setShowProperty2('w-1/2 p-3 bg-blue-50 hover:cursor-pointer')
+  }
+  const handleReviews=()=>{
+    setIsInfo(false);
+    setShowProperty2('w-1/2 p-3 bg-white hover:cursor-pointer')
+    setShowProperty1('w-1/2 p-3 bg-blue-50 hover:cursor-pointer')
+  }
+
 
   return (
     <div>
       <Header />
-      <div className="container mx-auto mt-8">
+      <div className='flex flex-col justify-center items-center'>
+      <div className="container w-[30%] mx-auto mt-8">
         {doctor ? (
-          <div className="max-w-lg mx-auto bg-white shadow-md rounded-sm overflow-hidden">
+          <div className=" mx-auto bg-white shadow-md rounded-sm overflow-hidden">
             <div className="p-4">
               <img
                 className="w-32 h-32 object-cover shadow-lg rounded-full mx-auto"
@@ -92,6 +141,21 @@ const DoctorProfile = () => {
           <p className="text-center mt-8">Doctor not found</p>
         )}
       </div>
+
+      <div className="flex flex-row  w-[30%] bg-white border-t-8 shadow-md rounded-sm">
+        <div onClick={handleInfo} className={showProperty1}>Info</div>
+        <div onClick={handleReviews} className={showProperty2}>Reviews</div>
+      </div>
+      {isInfo?
+      (<div className="flex justify-center w-[30%] shadow-md rounded-sm bg-white p-10">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>)
+      :( <div className="flex justify-center w-[30%] shadow-md rounded-sm bg-white p-10">
+            reviews
+        </div>)}
+        </div>
     </div>
   );
 };

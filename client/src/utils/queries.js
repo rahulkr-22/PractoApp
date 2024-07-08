@@ -97,3 +97,35 @@ query($d_id: ID!){
   } 
 }
 `
+
+export const CREATE_REVIEW=gql`
+mutation addReview($d_id:ID!,$p_id:ID!,$speciality:String!,$rating: Int!, $visitReason: String!, $content: String!){
+  addReview(d_id:$d_id,p_id:$p_id,speciality:$speciality,rating: $rating, visitReason: $visitReason, content: $content) {
+    id
+    d_id
+    p_id
+    speciality
+    rating
+  }
+}
+`
+
+export const GET_REVIEW=gql`
+query doctorReview($d_id: ID!, $speciality: String!){
+  doctorReview(d_id: $d_id, speciality: $speciality) {
+    rating,
+    content,
+    visitReason
+  }
+}
+`
+
+export const GET_CLINIC=gql`
+query getClinic($d_id: ID!){
+  doctorClinic(d_id: $d_id) {
+      name,
+      address,
+      city
+  }
+}
+`

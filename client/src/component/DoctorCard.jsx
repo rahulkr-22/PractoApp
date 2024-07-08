@@ -8,11 +8,12 @@ const DoctorCard = ({doctorObj, speciality}) => {
   }
 
   const nameClickHandler=()=>{
+    localStorage.setItem('speciality',speciality);
     navigate(`/doctor/${doctorObj.id}`)
   }
 
   return (
-    <div className='flex flex-row divide-y-2 justify-around p-6'>
+    <div className='flex flex-row divide-y-2 justify-around'>
       <div></div>
       <div className="flex flex-row gap-40 w-1/2 bg-white ">
         <div className='flex flex-row items-center pl-10'>         

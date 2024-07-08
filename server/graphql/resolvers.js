@@ -45,6 +45,14 @@ const resolvers={
         doctorSpeciality: async(_,{d_id})=>{
           const [rows]=await pool.query('SELECT DISTINCT s.name FROM doctor d JOIN doctor_specialisation ds ON ds.d_id=? JOIN specialisation s ON ds.s_id=s.id',[d_id]);
           return rows;
+        },
+        doctorClinic: async(_,{d_id})=>{
+          const [rows]=await pool.query('SELECT DISTINCT c.name,c.address,c.city FROM doctor d JOIN doctor_clinic dc ON dc.d_id=? JOIN clinic c ON dc.c_id=c.id',[d_id]);
+          return rows;
+        },
+        doctorReview: async(_,{d_id,speciality})=>{
+          const [rows]=await pool.query('SELECT rating, visitReason, content FROM review WHERE review.d_id=? AND review.speciality=?',[d_id,speciality]);
+          return rows;
         }
 
     },
@@ -143,6 +151,14 @@ const resolvers={
           return {
             id
           }
+        },
+        addReview: async(_,{d_id,p_id,speciality,rating,visitReason,content})=>{
+          const [rows]=await pool.query('INSERT INTO review (d_id,p_id,speciality,rating,visitReason,content) VALUES (?,?,?,?, ?,?)',[d_id,p_id,speciality,rating,visitReason,content])
+          return{
+            id:rows.insertId,
+            d_id,p_id,speciality,
+            rating,visitReason,content
+          }         
         }
 
     }

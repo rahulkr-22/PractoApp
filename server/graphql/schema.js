@@ -49,6 +49,16 @@ const typeDefs = gql`
     clientSecret: String
   }
 
+  type Review{
+    id:ID!
+    d_id:ID!
+    p_id:ID!
+    speciality:String!
+    rating:Int!
+    visitReason:String!
+    content:String!
+  }
+
 
   type Query { 
     hello:String
@@ -61,6 +71,8 @@ const typeDefs = gql`
     specialities(name:String!):[Speciality]
     bookedSlots(d_id:ID!): [Appointment]
     doctorSpeciality(d_id:ID!):[Speciality!]!
+    doctorClinic(d_id:ID!):[Clinic!]!
+    doctorReview(d_id:ID!,speciality:String!):[Review]
   }
 
   type Mutation {
@@ -69,6 +81,7 @@ const typeDefs = gql`
     loginUser(email:String!,password:String!): User
     addAppointment(d_id:ID!,p_id:ID!,slot:String!,success:Boolean!):Appointment
     cancelAppointment(id:ID!): Appointment
+    addReview(d_id:ID!,p_id:ID!,speciality:String!,rating:Int!,visitReason:String!,content:String!):Review
   }
 
 `;

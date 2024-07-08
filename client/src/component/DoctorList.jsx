@@ -59,9 +59,9 @@ const DoctorList = () => {
       <Header/>
       <Search/>
 
-      <div className='flex justify-center font-semibold text-lg text-gray-700'>
-  Showing Results for {speciality}.
-</div>
+      <div className='flex justify-center font-semibold text-lg text-gray-700 mb-3'>
+        Showing Results for {speciality}.
+      </div>
 
       <div className='flex flex-col justify-center'>
       {doctors.map((doctor) => (
