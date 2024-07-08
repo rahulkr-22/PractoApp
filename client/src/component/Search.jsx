@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import SearchCard from './SearchCard';
 import { SEARCH_SPECIALITY } from '../utils/queries';
 import { client } from '..';
 
 const Search = () => {
+  const [isContentVisible, setIsContentVisible] = useState(false);
+  const inputRef = useRef(null);
+  const contentRef = useRef(null);
   const [keyword, setKeyword] = useState("");
   const [showPopular, setShowPopular] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
@@ -12,7 +15,7 @@ const Search = () => {
   useEffect(() => {
     if (keyword !== "") {
       client
-        .query({ query:SEARCH_SPECIALITY, variables: { name: keyword } })
+        .query({ query: SEARCH_SPECIALITY, variables: { name: keyword } })
         .then(result => {
           if (result.data?.specialities) {
             setSearchResults(result.data.specialities);
@@ -24,41 +27,54 @@ const Search = () => {
 
   const handleClick = () => {
     if (keyword === "") {
+      setIsContentVisible(true);
       setShowPopular(true);
+    }
+  };
+
+  const handleClickOutside = (event) => {
+    if (
+      inputRef.current && !inputRef.current.contains(event.target) &&
+      contentRef.current && !contentRef.current.contains(event.target)
+    ) {
+      setIsContentVisible(false);
     }
   };
 
   const handleChange = (event) => {
     setKeyword(event.target.value);
     setShowPopular(false);
+    setIsContentVisible(true);
   };
 
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="relative">
-      <img className="w-full h-auto object-cover" src="https://blog.practo.com/wp-content/uploads/2017/04/Blog-Hero-Visual-1170x460.png" alt="practo-banner" />
-      <div className="absolute inset-0 flex items-center justify-center flex-col overflow-visible">
+    <div className="relative flex flex-row justify-center items-center py-10">
+      <div className='relative'>
         <input
+          ref={inputRef}
           onClick={handleClick}
           onChange={handleChange}
           type="text"
-          placeholder="Search doctors"
-          className="p-2 hover:cursor-pointer w-1/4"
+          placeholder="Search Specialities"
+          className="p-2 hover:cursor-pointer w-96 border border-gray-300 shadow-sm text-gray-800"
         />
-        <div className='flex flex-row justify-center '>
-          <div></div>
-          {searchResults?.map((item)=>{
-            <h1>item</h1>
-          })}
-            <div className="absolute top-full w-1/4 ml-96  transform -translate-x-1/2 mt-2"> 
-            {showPopular
-              ? <SearchCard popular={true} speciality={pspeciality} />
-              : (
-                keyword!=="" && <SearchCard popular={false} speciality={searchResults?.map(item => item.name)} />
-              )} 
+
+        {isContentVisible && (
+          <div ref={contentRef} className="absolute top-full left-0 mt-2 p-2 border border-gray-300 bg-white shadow-lg">
+            {showPopular ? (
+              <SearchCard popular={true} speciality={pspeciality} />
+            ) : (
+              keyword !== "" && <SearchCard popular={false} speciality={searchResults?.map(item => item.name)} />
+            )}
           </div>
-          <div></div>
-        </div>
-        
+        )}
       </div>
     </div>
   );

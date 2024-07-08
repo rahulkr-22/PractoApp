@@ -12,7 +12,7 @@ const PaymentSummary = () => {
   const navigate=useNavigate();
   const {id}=useParams();
   const [doctor, setDoctor] = useState(null);
-  const [appointment,setAppointment]=useState(null);
+  let appointment=null;
   const dispatch=useDispatch();
   const timeSlot=useSelector(store=>store.appointment.time);
 
@@ -35,28 +35,37 @@ const PaymentSummary = () => {
 
   const clinicInfo = {
     name: 'Relief Clinic',
-    location: 'HSR Layout',
+    location: 'HSR Layout, Bangalore',
   };
 
-  const handleClick=async()=>{
-
+  const addAppointmentFunc=async()=>{
     await client.mutate({
       mutation:ADD_APPOINTMENT,
       variables:{d_id:parseInt(id),p_id:parseInt(userData.id),slot:timeSlot,success:true}
     })
     .then((result)=>{
-      setAppointment(result.data.addAppointment)
+      appointment=result.data.addAppointment;
     })
     .catch((error)=>{
       console.log(error)
     })
+  }
+
+  const handleClick=async()=>{
+    if(!userData){
+      navigate('/login');
+      return;
+    }
+
+    if(timeSlot) await addAppointmentFunc();
     
+
     const book={
       doctorId:parseInt(id),
       doctorName:doctor.name,
       fee:doctor.fee,
       image_url:doctor.image_url,
-      appointmentNumber:appointment.id,
+      appointmentNumber:appointment?.id,
     }
 
     localStorage.setItem('book',JSON.stringify(book));

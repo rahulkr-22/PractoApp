@@ -3,6 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import {useDispatch} from 'react-redux'
 import { client } from '..';
 import { GET_DOCTOR } from '../utils/queries';
+{/* <button
+  className="rounded p-1 px-2 text-sky-400 font-medium hover:bg-sky-500 hover:text-white"
+  onClick={handleClickHome}
+>
+  Back To Home
+</button> */}
 
 
 const DoctorProfile = () => {
