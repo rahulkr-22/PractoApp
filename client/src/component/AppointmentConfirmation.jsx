@@ -75,7 +75,7 @@ const Card = () => {
                 </div>
                 <div>
                     <p>Appointment Charges</p>
-                    <h3 className='font-semibold'>Rs {bookData.fee}</h3>
+                    <h3 className='font-semibold'>₹{bookData.fee}</h3>
                 </div>
                 <div className='flex flex-row gap-x-9'>
                     <button className="border-2 border-sky-300 rounded p-1 px-2 text-sky-400 font-medium hover:bg-sky-400 hover:text-white" onClick={handleClickCancel}>Cancel Appointment</button>

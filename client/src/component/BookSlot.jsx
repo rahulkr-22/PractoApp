@@ -14,8 +14,8 @@ const BookClinic = () => {
   const [bookedSlots, setBookedSlots] = useState([]);
   const [clinicInfo, setClinicInfo] = useState({
     name: 'Relief Clinic',
-    fee: 300,
-    location: 'HSR Layout',
+    address: 'HSR Layout',
+    city:'Bangalore'
   });
 
   useEffect(() => {
@@ -77,11 +77,11 @@ const BookClinic = () => {
       <Header/>
     <div className="container mx-auto mt-8 p-4">
       <div className="max-w-xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
-        <div className="p-4 bg-blue-100 text-black-800">
-          <h2 className="text-lg font-bold text-center">Clinic Appointment</h2>
+        <div className="p-4 bg-sky-100 text-black-800">
+          <h2 className="text-lg font-bold text-center text-gray-700 mt-4">Clinic Appointment</h2>
           <div className="mt-2">
-            <h3 className="text-lg font-semibold text-gray-800">{clinicInfo.name}</h3>
-            <p className="text-sm">{clinicInfo.location}</p>
+            <h3 className="text-lg font-semibold text-gray-600">{clinicInfo.name}</h3>
+            <p className="text-sm text-gray-500">{clinicInfo.address}, {clinicInfo.city}</p>
           </div>
         </div>
         <div className="p-4">
@@ -90,7 +90,7 @@ const BookClinic = () => {
             {timeSlots.map((slot) => (
               <button
                 key={slot}
-                className={`cursor-pointer py-2 px-4 rounded ${selectedSlot === slot ? 'border border-blue-500' : 'bg-blue-100 text-blue-800'}`}
+                className={`cursor-pointer py-2 px-4 rounded ${selectedSlot === slot ? 'border border-sky-500' : 'bg-sky-100 text-sky-800'}`}
                 onClick={() => handleSlotSelect(slot)}
               >
                 {slot}
@@ -100,7 +100,7 @@ const BookClinic = () => {
           <div className="mt-4">
             <button
               onClick={goToPaymentSummary}
-              className="cursor-pointer py-2 px-4 bg-green-500 text-white rounded hover:bg-green-600"
+              className="mt-6 bg-sky-500 text-white font-semibold px-3 py-2 rounded hover:bg-sky-700"
               disabled={!selectedSlot}
             >
               Book Appointment

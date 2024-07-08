@@ -70,7 +70,7 @@ const Login = () => {
                 <label className="block mb-1 font-medium">Full Name</label>
                 <input 
                   type="text" 
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" 
                   placeholder="Full Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -80,7 +80,7 @@ const Login = () => {
                 <label className="block mb-1 font-medium">Email</label>
                 <input 
                   type="email" 
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" 
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -90,7 +90,7 @@ const Login = () => {
                 <label className="block mb-1 font-medium">Mobile Number</label>
                 <input 
                   type="tel" 
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" 
                   placeholder="Mobile Number"
                   value={contact}
                   onChange={(e) => setContact(e.target.value)}
@@ -100,7 +100,7 @@ const Login = () => {
                 <label className="block mb-1 font-medium">Password</label>
                 <input 
                   type="password" 
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" 
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -108,7 +108,7 @@ const Login = () => {
               </div>
               <button 
                 type="submit" 
-                className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="w-full bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
               >
                 Register
               </button>
@@ -116,7 +116,7 @@ const Login = () => {
             <p className="text-center mt-4">
               Already have an account?{' '}
               <button
-                className="text-blue-500"
+                className="text-sky-500"
                 onClick={() => setIsLogin(true)}
               >
                 Login Here
@@ -131,7 +131,7 @@ const Login = () => {
                 <label className="block mb-1 font-medium">Email</label>
                 <input 
                   type="text" 
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" 
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -141,7 +141,7 @@ const Login = () => {
                 <label className="block mb-1 font-medium">Password</label>
                 <input 
                   type="password" 
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500" 
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -149,7 +149,7 @@ const Login = () => {
               </div>
               <button 
                 type="submit" 
-                className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="w-full bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
               >
                 Login
               </button>
@@ -157,7 +157,7 @@ const Login = () => {
             <p className="text-center mt-4">
               Don't have an account?{' '}
               <button
-                className="text-blue-500"
+                className="text-sky-500"
                 onClick={() => setIsLogin(false)}
               >
                 Register

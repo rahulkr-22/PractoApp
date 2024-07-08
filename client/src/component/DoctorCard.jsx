@@ -21,7 +21,7 @@ const DoctorCard = ({doctorObj, speciality}) => {
             <h1 onClick={nameClickHandler} className="block mt-1 text-lg leading-tight font-medium text-sky-500 hover:underline hover:cursor-pointer">{doctorObj.name}</h1>
             <div className="text-gray-500 mt-2 ">{speciality}</div>
             <p className="mt-2 text-gray-500">{doctorObj.experience} years experience overall</p>
-            <p className="mt-2 text-gray-500">₹{doctorObj.fee} Consultation fee at clinic</p>
+            <p className="mt-2 text-gray-500"> <span className='font-semibold'>₹{doctorObj.fee} </span>Consultation fee at clinic</p>
           </div>
           </div>
           <div className="p-8">

@@ -72,19 +72,24 @@ const CheckoutForm = () => {
         layout:"tabs"
     }
   return (
-    <form id='payment-form' onSubmit={handleSubmit}>
+    <div className='flex flex-row justify-center items-center '>
+        <div></div>
+        <form id='payment-form' onSubmit={handleSubmit} className='w-1/3 mt-16'>
             <LinkAuthenticationElement 
             id='link-authentication-element'
             onChange={handleEmailChange}
             />
             <PaymentElement id='payment-element' options={PaymentElementOptions}/>
-            <button disabled={isLoading || !stripe || !elements} id='submit'>
+            <button disabled={isLoading || !stripe || !elements} id='submit' className="mt-6 bg-sky-500 text-white font-semibold px-3 py-2 rounded hover:bg-sky-700">
                 <span>
                     {isLoading ? <div className='spinner' id='spinner'></div> : "Pay now"}
                 </span>
             </button>
             {message && <div id='payment-message'></div>}
         </form>
+        <div></div>
+    </div>
+  
   )
 }
 
