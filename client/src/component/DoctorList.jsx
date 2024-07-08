@@ -4,6 +4,7 @@ import { client } from '../index.js';
 import { SEARCH_DOCTORS } from '../utils/queries.js';
 import Loading from './Loading.jsx';
 import { useParams } from 'react-router-dom';
+import Header from './Header.jsx';
 
 
 const DoctorList = () => {
@@ -53,12 +54,16 @@ const DoctorList = () => {
   }, [loading, hasMore]);
 
   return (
-    <div className='flex flex-col justify-center gap-2'>
+    <div>
+      <Header/>
+      <div className='flex flex-col justify-center'>
       {doctors.map((doctor) => (
         <DoctorCard key={doctor.id} doctorObj={doctor} speciality={speciality} />
       ))}
       {loading && <Loading />}
     </div>
+    </div>
+
   );
 };
 
