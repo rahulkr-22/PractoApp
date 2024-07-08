@@ -89,3 +89,11 @@ query bookedSlots($d_id: ID!){
   }  
 }
 `
+
+export const DOCTOR_SPECIALITY=gql`
+query($d_id: ID!){
+  doctorSpeciality(d_id: $d_id){
+    name
+  } 
+}
+`

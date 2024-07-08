@@ -60,6 +60,7 @@ const typeDefs = gql`
     DoctorFromSpeciality(name:String!,limit:Int!, offset:Int!):[Doctor]
     specialities(name:String!):[Speciality]
     bookedSlots(d_id:ID!): [Appointment]
+    doctorSpeciality(d_id:ID!):[Speciality!]!
   }
 
   type Mutation {

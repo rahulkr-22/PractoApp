@@ -4,7 +4,6 @@ import {Routes, Route} from 'react-router-dom'
 import Home from './component/Home';
 import Login from './component/Login';
 import DoctorList from './component/DoctorList';
-import Header from './component/Header';
 import DoctorProfile from './component/DoctorProfile';
 import BookSlot from './component/BookSlot';
 import PaymentSummary from './component/PaymentSummary';

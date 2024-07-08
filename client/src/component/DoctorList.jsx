@@ -5,6 +5,7 @@ import { SEARCH_DOCTORS } from '../utils/queries.js';
 import Loading from './Loading.jsx';
 import { useParams } from 'react-router-dom';
 import Header from './Header.jsx';
+import Search from './Search.jsx';
 
 
 const DoctorList = () => {
@@ -56,6 +57,12 @@ const DoctorList = () => {
   return (
     <div>
       <Header/>
+      <Search/>
+
+      <div className='flex justify-center font-semibold text-lg text-gray-700'>
+  Showing Results for {speciality}.
+</div>
+
       <div className='flex flex-col justify-center'>
       {doctors.map((doctor) => (
         <DoctorCard key={doctor.id} doctorObj={doctor} speciality={speciality} />
@@ -63,6 +70,7 @@ const DoctorList = () => {
       {loading && <Loading />}
     </div>
     </div>
+    
 
   );
 };

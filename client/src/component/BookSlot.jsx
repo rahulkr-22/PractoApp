@@ -4,19 +4,39 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setTime } from '../redux/appointmentSlice';
 import { client } from '..';
 import { BOOKED_SLOTS } from '../utils/queries';
+import { ADD_APPOINTMENT, GET_DOCTOR } from '../utils/queries';
+import { setDoctorId, setDoctorImg, setDoctorName, setFee } from '../redux/appointmentSlice';
 import Header from './Header';
 
 const BookClinic = () => {
+
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate(); 
   const [selectedSlot, setSelectedSlot] = useState("");
   const [bookedSlots, setBookedSlots] = useState([]);
+  const [doctor, setDoctor] = useState(null);
+  const userData = useSelector(state => state.user?.user);
   const [clinicInfo, setClinicInfo] = useState({
     name: 'Relief Clinic',
     address: 'HSR Layout',
     city:'Bangalore'
   });
+
+  useEffect(() => {
+    client.query({
+      query: GET_DOCTOR,
+      variables: { id: parseInt(id) },
+    })
+    .then(result => {
+      if (result.data && result.data.doctor) {
+        setDoctor(result.data.doctor);
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching doctor:', error);
+    });
+  }, [id]);
 
   useEffect(() => {
     client.query({
@@ -33,20 +53,77 @@ const BookClinic = () => {
     });
   }, [id]);
 
+  const addAppointmentFunc = async () => {
+    let appointment = null;
+    try {
+      const result = await client.mutate({
+        mutation: ADD_APPOINTMENT,
+        variables: { d_id: parseInt(id), p_id: parseInt(userData.id), slot: selectedSlot, success: true },
+      });
+      appointment = result.data.addAppointment;
+    } catch (error) {
+      console.log(error);
+    }
+    return appointment;
+  };
+  const getIndianTime = () => {
+    const options = {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+      timeZone: 'Asia/Kolkata'
+    };
+  
+    const now = new Date();
+    return now.toLocaleTimeString('en-US', options);
+  };
+  const parseTimeToSortableString = (timeString) => {
+    const [time, period] = timeString.split(' '); 
+    let [hours, minutes] = time.split(':'); 
+  
+    hours = parseInt(hours, 10); 
+    minutes = parseInt(minutes, 10);
+  
+    if (period === 'PM' && hours < 12) {
+      hours += 12; 
+    } else if (period === 'AM' && hours === 12) {
+      hours = 0; 
+    }
+  
+    // Pad hours and minutes with leading zeros for consistent string comparison
+    const paddedHours = hours.toString().padStart(2, '0');
+    const paddedMinutes = minutes.toString().padStart(2, '0');
+  
+    return `${paddedHours}:${paddedMinutes}`;
+  };
+  function compareTimes(time1, time2){
+    const parsedTime1 = parseTimeToSortableString(time1);
+    const parsedTime2 = parseTimeToSortableString(time2);
+    
+    console.log(parsedTime1,parsedTime2)
+    if (parsedTime1 < parsedTime2) {
+      return false;
+    } else if (parsedTime1 > parsedTime2) {
+      return true;
+    } else {
+      return true;
+    }
+  };
+
   // Function to generate time slots
   const generateTimeSlots = () => {
     const slots = [];
     const todayIST = new Date();
     const ISTOffset = 5.5 * 60 * 60 * 1000;
     todayIST.setTime(todayIST.getTime() + ISTOffset);
-
     for (let i = 0; i <= 23; i++) {
       const time = new Date(todayIST);
       time.setHours(i);
       time.setMinutes(0);
       const tempTime = time.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' });
+      const indianTime = getIndianTime();
 
-      if (!bookedSlots.includes(tempTime)) {
+      if (!bookedSlots.includes(tempTime) && compareTimes(tempTime.toUpperCase(),indianTime)) {
         slots.push(tempTime);
       }
     }
@@ -63,9 +140,40 @@ const BookClinic = () => {
     setSelectedSlot(slot);
   };
 
-  const goToPaymentSummary = () => {
+  const goToPaymentSummary = async() => {
     if (selectedSlot) {
+
+      if (!userData) {
+        navigate('/login');
+        return;
+      }
+  
+      if (!selectedSlot || !doctor) {
+        alert('Please select a time slot and ensure the doctor information is loaded.');
+        return;
+      }
+  
+      const appointment = await addAppointmentFunc();
+  
+      if (!appointment) {
+        alert('Error creating appointment. Please try again.');
+        return;
+      }
+  
+      const book = {
+        doctorId: parseInt(id),
+        doctorName: doctor.name,
+        fee: doctor.fee,
+        image_url: doctor.image_url,
+        appointmentNumber: appointment.id,
+      };
+      localStorage.setItem('book', JSON.stringify(book));
+      dispatch(setDoctorId(parseInt(id)));
+      dispatch(setDoctorName(doctor.name));
+      dispatch(setFee(doctor.fee));
+      dispatch(setDoctorImg(doctor.image_url));
       dispatch(setTime(selectedSlot));
+      localStorage.setItem('slotTime',selectedSlot);
       navigate(`/payment-summary/${id}`); 
     } else {
       alert('Please select a time slot first.');

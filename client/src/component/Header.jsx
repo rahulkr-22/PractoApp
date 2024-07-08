@@ -14,7 +14,7 @@ const Header = () => {
   }
 
   return (
-    <div className='px-44 py-5 flex items-center justify-between border-b-2'>
+    <div className='px-44 py-5 flex items-center justify-between border-b-2 bg-white'>
       <img onClick={()=>{navigate('/')}} className='w-32 hover:cursor-pointer' src='https://upload.wikimedia.org/wikipedia/en/6/64/Practo_new_logo.png?20180609150803' alt='practo-logo'/>
 
       {user?

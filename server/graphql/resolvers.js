@@ -41,6 +41,10 @@ const resolvers={
 
           return rows;
 
+        },
+        doctorSpeciality: async(_,{d_id})=>{
+          const [rows]=await pool.query('SELECT DISTINCT s.name FROM doctor d JOIN doctor_specialisation ds ON ds.d_id=? JOIN specialisation s ON ds.s_id=s.id',[d_id]);
+          return rows;
         }
 
     },
