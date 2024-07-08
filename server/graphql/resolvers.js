@@ -35,6 +35,12 @@ const resolvers={
         specialities: async(_,{name})=>{
             const [rows]=await pool.query('SELECT * FROM specialisation WHERE name LIKE ?', [`%${name}%`]);
             return rows;
+        },
+        bookedSlots: async(_,{d_id})=>{
+          const [rows]=await pool.query('SELECT slot FROM appointment WHERE d_id=? AND success=true',[d_id])
+
+          return rows;
+
         }
 
     },

@@ -81,3 +81,11 @@ mutation($id: ID!){
   }
 }
 `
+
+export const BOOKED_SLOTS=gql`
+query bookedSlots($d_id: ID!){
+  bookedSlots(d_id: $d_id){
+    slot
+  }  
+}
+`

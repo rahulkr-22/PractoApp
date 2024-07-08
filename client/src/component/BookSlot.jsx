@@ -1,19 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector,useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { setTime } from '../redux/appointmentSlice';
-
+import { client } from '..';
+import { BOOKED_SLOTS } from '../utils/queries';
+import Header from './Header';
 
 const BookClinic = () => {
-  const {id}=useParams();
-  const dispatch=useDispatch();
+  const { id } = useParams();
+  const dispatch = useDispatch();
   const navigate = useNavigate(); 
-  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState("");
+  const [bookedSlots, setBookedSlots] = useState([]);
   const [clinicInfo, setClinicInfo] = useState({
     name: 'Relief Clinic',
     fee: 300,
     location: 'HSR Layout',
   });
+
+  useEffect(() => {
+    client.query({
+      query: BOOKED_SLOTS,
+      variables: { d_id: id },
+    })
+    .then((result) => {
+      const bookData = result.data.bookedSlots;
+      const slots = bookData.map(s => s.slot);
+      setBookedSlots(slots);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }, [id]);
 
   // Function to generate time slots
   const generateTimeSlots = () => {
@@ -26,12 +44,20 @@ const BookClinic = () => {
       const time = new Date(todayIST);
       time.setHours(i);
       time.setMinutes(0);
-      slots.push({ time: time.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' }), available: true });
+      const tempTime = time.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' });
+
+      if (!bookedSlots.includes(tempTime)) {
+        slots.push(tempTime);
+      }
     }
     return slots;
   };
 
-  const [timeSlots, setTimeSlots] = useState(generateTimeSlots);
+  const [timeSlots, setTimeSlots] = useState([]);
+
+  useEffect(() => {
+    setTimeSlots(generateTimeSlots());
+  }, [bookedSlots]);
 
   const handleSlotSelect = (slot) => {
     setSelectedSlot(slot);
@@ -39,7 +65,7 @@ const BookClinic = () => {
 
   const goToPaymentSummary = () => {
     if (selectedSlot) {
-      dispatch(setTime(selectedSlot.time))
+      dispatch(setTime(selectedSlot));
       navigate(`/payment-summary/${id}`); 
     } else {
       alert('Please select a time slot first.');
@@ -47,6 +73,8 @@ const BookClinic = () => {
   };
 
   return (
+    <div>
+      <Header/>
     <div className="container mx-auto mt-8 p-4">
       <div className="max-w-xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
         <div className="p-4 bg-blue-100 text-black-800">
@@ -61,13 +89,11 @@ const BookClinic = () => {
           <div className="grid grid-cols-4 gap-2">
             {timeSlots.map((slot) => (
               <button
-                key={slot.time}
-                className={`cursor-pointer py-2 px-4 rounded ${slot.available ? 'bg-blue-100 text-blue-800' : 'bg-gray-200 text-gray-400'} 
-                ${selectedSlot && selectedSlot.time === slot.time ? 'border border-blue-500' : ''}`}
-                disabled={!slot.available}
+                key={slot}
+                className={`cursor-pointer py-2 px-4 rounded ${selectedSlot === slot ? 'border border-blue-500' : 'bg-blue-100 text-blue-800'}`}
                 onClick={() => handleSlotSelect(slot)}
               >
-                {slot.time}
+                {slot}
               </button>
             ))}
           </div>
@@ -82,6 +108,7 @@ const BookClinic = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

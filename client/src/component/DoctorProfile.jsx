@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import {useDispatch} from 'react-redux'
 import { client } from '..';
 import { GET_DOCTOR } from '../utils/queries';
+import Header from './Header';
 {/* <button
   className="rounded p-1 px-2 text-sky-400 font-medium hover:bg-sky-500 hover:text-white"
   onClick={handleClickHome}
@@ -45,6 +46,8 @@ const DoctorProfile = () => {
   }
 
   return (
+    <div>
+      <Header/>
     <div className="container mx-auto mt-8">
       {doctor ? (
         <div className="max-w-lg mx-auto bg-white shadow-md rounded-lg overflow-hidden">
@@ -61,16 +64,18 @@ const DoctorProfile = () => {
           </div>
           <div className="p-4 text-center">
             <button
-              className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700"
+              className="mt-6 bg-sky-500 text-white font-semibold px-3 py-2 rounded hover:bg-sky-700"
               onClick={handleBookClinicVisit} 
             >
               Book Clinic Visit
             </button>
+            
           </div>
         </div>
       ) : (
         <p className="text-center mt-8">Doctor not found</p>
       )}
+    </div>
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { ADD_APPOINTMENT, GET_DOCTOR } from '../utils/queries';
 import { client } from '..';
 import { setDoctorId, setDoctorImg, setDoctorName, setFee } from '../redux/appointmentSlice';
+import Header from './Header';
 
 
 
@@ -77,6 +78,7 @@ const PaymentSummary = () => {
   }
 
   return (
+    <div><Header/>
     <div className="container mx-auto mt-8 p-4">
       <div className="max-w-xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
         <div className="p-4 bg-blue-100 text-blue-800">
@@ -102,6 +104,7 @@ const PaymentSummary = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };
