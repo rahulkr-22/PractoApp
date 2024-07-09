@@ -138,3 +138,14 @@ query user($id: ID!){
   }
 }
 `
+export const GET_DOCTOR_NAME=gql`
+query($name: String!){
+  doctorByName(name: $name) {
+    id
+    name
+    fee
+    experience
+    image_url
+  }
+}
+`

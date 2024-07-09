@@ -74,6 +74,7 @@ const typeDefs = gql`
     doctorSpeciality(d_id:ID!):[Speciality!]!
     doctorClinic(d_id:ID!):[Clinic!]!
     doctorReview(d_id:ID!,speciality:String!):[Review]
+    doctorByName(name:String!): [Doctor]
   }
 
   type Mutation {
