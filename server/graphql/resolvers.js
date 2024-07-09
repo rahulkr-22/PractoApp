@@ -111,11 +111,14 @@ const resolvers={
             };
           },
           loginUser: async (_, { email, password}) => {
-
+            const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!email.match(regex)) {
+              throw new Error("Email is not valid.");
+            } 
             const [user] = await pool.query(`SELECT * FROM patient p WHERE p.email=?`,[email]);
 
             if (user.length == 0) {
-              throw new Error("you have not registered.");
+              throw new Error("Email or Password is not correct.");
             }
 
             const isPasswordMatched = await bcryptjs.compare(
@@ -124,7 +127,7 @@ const resolvers={
             );
       
             if (!isPasswordMatched) {
-              throw new Error("wrong password");
+              throw new Error("Email or Password is not correct.");
             }
 
             const payload = {

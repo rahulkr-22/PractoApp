@@ -72,9 +72,9 @@ const CheckoutForm = () => {
         layout:"tabs"
     }
   return (
-    <div className='flex flex-row justify-center items-center '>
+    <div className='flex flex-row justify-center items-center'>
         <div></div>
-        <form id='payment-form' onSubmit={handleSubmit} className='w-1/3 mt-16'>
+        <form id='payment-form' onSubmit={handleSubmit} className='w-[30%] mt-16 space-y-3 bg-white p-8 rounded-md shadow-md'>
             <LinkAuthenticationElement 
             id='link-authentication-element'
             onChange={handleEmailChange}
