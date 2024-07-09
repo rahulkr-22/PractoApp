@@ -11,6 +11,7 @@ import Success from './component/Success';
 import Failed from './component/Failed';
 import Payment from './component/Payment';
 import AppointmentConfirmation from './component/AppointmentConfirmation';
+import AppointmentList from './component/AppointmentList';
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
       <Route path='/payment/success' element={<Success/>}/>
       <Route path='/payment/failed' element={<Failed/>}/>
       <Route path='/appointment/status' element={<AppointmentConfirmation/>}/>
+      <Route path='/appointment/all' element={<AppointmentList/>}/>
     </Routes>
   );
 }

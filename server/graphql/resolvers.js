@@ -16,12 +16,20 @@ const resolvers={
             const [rows]=await pool.query('SELECT * FROM patient WHERE id = ?',[id]);
             return rows[0]
         },
+        userByEmail: async(_,{email})=>{
+            const [rows]=await pool.query('SELECT * FROM patient WHERE email = ?',[email]);
+            return rows[0]
+        },
         doctors: async(_,args)=>{
             const [rows]=await pool.query('SELECT * FROM doctor');
             return rows;
         },
         doctor: async(_,{id})=>{
             const [rows]=await pool.query('SELECT * FROM doctor WHERE id= ?',[id])
+            return rows[0]
+        },
+        clinic: async(_,{id})=>{
+            const [rows]=await pool.query('SELECT * FROM clinic WHERE id= ?',[id])
             return rows[0]
         },
         appointments: async(_,args)=>{
@@ -51,14 +59,17 @@ const resolvers={
           return rows;
         },
         doctorClinic: async(_,{d_id})=>{
-          const [rows]=await pool.query('SELECT DISTINCT c.name,c.address,c.city FROM doctor d JOIN doctor_clinic dc ON dc.d_id=? JOIN clinic c ON dc.c_id=c.id',[d_id]);
+          const [rows]=await pool.query('SELECT DISTINCT c.id,c.name,c.address,c.city FROM doctor d JOIN doctor_clinic dc ON dc.d_id=? JOIN clinic c ON dc.c_id=c.id',[d_id]);
           return rows;
         },
         doctorReview: async(_,{d_id,speciality})=>{
           const [rows]=await pool.query('SELECT p_id,rating,patientName, visitReason, content FROM review WHERE review.d_id=? AND review.speciality=?',[d_id,speciality]);
           return rows;
+        },
+        appointmentByPatient: async(_,{p_id})=>{
+          const [rows]=await pool.query('SELECT id,d_id,p_id,c_id,slot,success FROM appointment WHERE p_id = ?',[p_id])
+          return rows;
         }
-
     },
 
     Mutation:{
@@ -146,11 +157,11 @@ const resolvers={
                 id:user[0].id, name:user[0].name, email, contact:user[0].contact,token
             };
           },
-          addAppointment: async(_,{d_id,p_id,slot,success})=>{
-            const [rows]=await pool.query('INSERT INTO appointment (d_id,p_id,slot,success) VALUES (?, ?,?,?)',[d_id,p_id,slot,success])
+          addAppointment: async(_,{d_id,p_id,c_id,slot,success})=>{
+            const [rows]=await pool.query('INSERT INTO appointment (d_id,p_id,c_id,slot,success) VALUES (?,?,?,?,?)',[d_id,p_id,c_id,slot,success])
             return{
               id:rows.insertId,
-              d_id,p_id,slot,success
+              d_id,p_id,c_id,slot,success
             }
         },
         cancelAppointment: async(_,{id})=>{

@@ -124,6 +124,7 @@ query doctorReview($d_id: ID!, $speciality: String!){
 export const GET_CLINIC=gql`
 query getClinic($d_id: ID!){
   doctorClinic(d_id: $d_id) {
+    id,
       name,
       address,
       city
@@ -146,6 +147,25 @@ query($name: String!){
     fee
     experience
     image_url
+  }
+}
+`
+
+export const GET_APPOINTMENT_USER=gql`
+query($p_id: ID!){
+  appointmentByPatient(p_id: $p_id) {
+    id
+    d_id
+    p_id
+    slot
+    success
+  }
+}
+`
+export const GET_USER_BY_EMAIL=gql`
+query($email: String!){
+  userByEmail(email: $email) {
+    id
   }
 }
 `

@@ -41,6 +41,7 @@ const typeDefs = gql`
     id:ID!
     d_id:ID!
     p_id:ID!
+    c_id:ID!
     slot:String!
     success:Boolean!
   }
@@ -64,10 +65,12 @@ const typeDefs = gql`
   type Query { 
     hello:String
     user(id:ID!):User
+    userByEmail(email:String!):User
     doctors: [Doctor]
     doctor(id:ID!): Doctor
+    clinic(id:ID!): Clinic
     appointments:[Appointment]
-    appointmentByDoctorSlot(d_id:ID!,):Appointment
+    appointmentByDoctorSlot(d_id:ID!):Appointment
     DoctorFromSpeciality(name:String!,limit:Int!, offset:Int!):[Doctor]
     specialities(name:String!):[Speciality]
     bookedSlots(d_id:ID!): [Appointment]
@@ -75,6 +78,7 @@ const typeDefs = gql`
     doctorClinic(d_id:ID!):[Clinic!]!
     doctorReview(d_id:ID!,speciality:String!):[Review]
     doctorByName(name:String!): [Doctor]
+    appointmentByPatient(p_id:ID!):[Appointment]
   }
 
   type Mutation {

@@ -8,6 +8,7 @@ import Header from './Header';
 import { FaStar } from "react-icons/fa6";
 import { MdVerified } from "react-icons/md";
 import { BiSolidLike } from "react-icons/bi";
+import { IoIosCheckbox,IoIosCheckboxOutline } from "react-icons/io";
 
 const Star = ({ count }) => {
   const stars = Array(count).fill(null);
@@ -24,6 +25,7 @@ const DoctorProfile = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const navigate = useNavigate();
+  const [selectId, setSelectedId]=useState(0);
   const [doctor, setDoctor] = useState(null);
   const [specialities, setSpecialities] = useState([]);
   const [clinic, setClinic] = useState(null);
@@ -33,6 +35,7 @@ const DoctorProfile = () => {
   const [showProperty1, setShowProperty1] = useState('w-1/2 p-3 font-semibold  bg-white hover:cursor-pointer text-center')
   const [showProperty2, setShowProperty2] = useState('w-1/2 p-3 font-semibold  bg-blue-50 hover:cursor-pointer text-center')
   const speciality = localStorage.getItem('speciality');
+
   useEffect(() => {
     if (id) {
       const doctorId = parseInt(id);
@@ -96,7 +99,7 @@ const DoctorProfile = () => {
           console.error('Error fetching reviews:', error);
           setLoading(false);
         });
-
+        if(clinic) setSelectedId(clinic[0].id)
     }
     else {
       setLoading(false);
@@ -104,6 +107,7 @@ const DoctorProfile = () => {
   }, [id]);
 
   const handleBookClinicVisit = () => {
+    localStorage.setItem('clinicId',selectId);
     navigate(`/appointment/${id}`);
   };
 
@@ -170,16 +174,20 @@ const DoctorProfile = () => {
 
             <div className='flex justify-normal w-[40%] bg-white ml-8'>
               <ul className='divide-y-2 divide-sky-100 p-2'>
+                <p className='text-center text-gray-600 font-semibold'>select clinic</p>
                 {(clinic && clinic.map((cl) => {
-                  return (
-                    <li className='mt-4'>
+                  return (      
+                    <div className='flex flex-row items-center gap-2'> 
+                      {selectId===cl.id?(<IoIosCheckbox onClick={()=>setSelectedId(cl.id)} className='text-2xl text-sky-600 hover:cursor-pointer'/>):
+                      (<IoIosCheckboxOutline onClick={()=>setSelectedId(cl.id)} className='text-2xl text-sky-600 hover:cursor-pointer'/>)}        
+                    <li className='mt-4 p-2 '>
                       <div className='flex flex-row gap-4'> <p className='font-semibold text-sky-500'>{cl.name},</p> <p className='text-gray-500 font-semibold'>{cl.city}</p></div>
 
                       <p className='text-md text-gray-400 mb-2'>{cl.address}</p>
 
                       <span className='flex flex-row items-center gap-2 text-green-500 font-semibold'>5.0 <Star count={5} /></span>
 
-                    </li>)
+                    </li></div>   )
                 }))}
               </ul>
             </div>

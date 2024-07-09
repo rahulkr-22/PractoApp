@@ -14,7 +14,7 @@ const Card = () => {
   const userData = useSelector(state => state.user?.user);
   const bookData = JSON.parse(localStorage.getItem('book'));
 
-  const getDate=()=>{
+  const getTodayDate=()=>{
     const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Kolkata' };
     const indiaLocale = 'en-IN';
     const date = new Date();
@@ -34,7 +34,7 @@ const Card = () => {
               </div>
               <div className='flex flex-row justify-around items-center h-20 p-4' >
                   <IoMdCalendar/>
-                  <div>On <span className='font-semibold mr-36'>July 8, 2024</span></div>
+                  <div>On <span className='font-semibold mr-36'>{getTodayDate()}</span></div>
                   <FiClock/>
                   <div className='font-semibold' >At {timeSlot}</div>
               </div>

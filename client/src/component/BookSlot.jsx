@@ -100,7 +100,6 @@ const BookClinic = () => {
     const parsedTime1 = parseTimeToSortableString(time1);
     const parsedTime2 = parseTimeToSortableString(time2);
     
-    console.log(parsedTime1,parsedTime2)
     if (parsedTime1 < parsedTime2) {
       return false;
     } else if (parsedTime1 > parsedTime2) {
@@ -162,6 +161,7 @@ const BookClinic = () => {
   
       const book = {
         doctorId: parseInt(id),
+        clinicId:localStorage.get('clinicId'),
         doctorName: doctor.name,
         fee: doctor.fee,
         image_url: doctor.image_url,
