@@ -12,7 +12,7 @@ const SearchItem = ({ speciality }) => {
   };
 
   return (
-    <div className='flex flex-row justify-between bg-white border p-3 border-gray-300 border-b-1 border-t-0 border-r-1 border-l-1' onClick={handleClick}>
+    <div className='flex flex-row justify-between bg-white border p-3 border-gray-300 border-b-1 border-t-0 border-r-1 border-l-1 hover:bg-gray-200' onClick={handleClick}>
       <div className='flex flex-row items-center justify-center'>
         <IoIosSearch />
         <h1 className='ml-3'>{speciality}</h1>
@@ -28,7 +28,7 @@ const SearchDoctorItem = ({d_id,name, image }) => {
   };
 
   return (
-    <div className='flex flex-row justify-between bg-white border p-3 border-gray-300 border-b-1 border-t-0 border-r-1 border-l-1' onClick={handleClick}>
+    <div className='flex flex-row justify-between bg-white border p-3 border-gray-300 border-b-1 border-t-0 border-r-1 border-l-1 hover:bg-gray-200' onClick={handleClick}>
       <div className='flex flex-row items-center justify-center'>
         <img className='w-6 rounded-full' src={image}/>
         <h1 className='ml-3'>{name}</h1>

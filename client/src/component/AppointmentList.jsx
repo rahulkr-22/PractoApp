@@ -46,7 +46,7 @@ const AppointmentList = () => {
       <Header/>
 
       <div className='flex justify-center font-semibold text-lg text-gray-700 mb-3 mt-4'>
-        Showing your Appointments 
+        Your Appointments 
       </div>
 
       <div className='flex flex-col justify-center'>

@@ -169,7 +169,7 @@ const DoctorProfile = () => {
           <div onClick={handleInfo} className={showProperty1}>Info</div>
           <div onClick={handleReviews} className={showProperty2}>Reviews</div>
         </div>
-        {isInfo === true ?
+        {isInfo && doctor ?
           (<div className="flex flex-row w-[50%] shadow-md rounded-sm bg-white">
 
             <div className='flex justify-normal w-[40%] bg-white ml-8'>
@@ -207,7 +207,7 @@ const DoctorProfile = () => {
           </div>)
           : (<div className="flex justify-center w-[50%] shadow-md rounded-sm bg-white p-10">
             <ul className='divide-y-2 '>
-              {reviews.length===0?<p>No Reviews Yet</p>:<p>{reviews.length} Reviews</p>}
+              {reviews && (reviews.length===0?<p>No Reviews Yet</p>:<p>{reviews.length} Reviews</p>)}
               {(reviews && reviews.map((review) => {
                 return (
                   <li className='p-2 my-2'>
