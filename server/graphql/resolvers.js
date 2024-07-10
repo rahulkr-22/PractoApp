@@ -208,6 +208,13 @@ const resolvers={
             d_id,s_id
           }
         },
+        addSpeciality:async(_,{name})=>{
+          const [rows]=await pool.query('INSERT INTO specialisation (name) VALUES (?)',[name]);
+          return {
+            id:rows.insertId,
+            name
+          }
+        }
 
 
     }

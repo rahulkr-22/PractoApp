@@ -104,6 +104,7 @@ const typeDefs = gql`
     addClinic(name:String!,address:String!,city:String!):Clinic
     addDoctorClinic(d_id:ID!,c_id:ID!):DoctorClinic
     addDoctorSpecialisation(d_id:ID!,s_id:ID!):DoctorSpecialisation
+    addSpeciality(name:String!):Speciality
   }
 
 `;
