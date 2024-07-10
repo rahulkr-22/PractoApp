@@ -61,6 +61,18 @@ const typeDefs = gql`
     content:String!
   }
 
+  type DoctorClinic{
+    dc_id:ID!
+    d_id:ID!
+    c_id:ID!
+  }
+
+  type DoctorSpecialisation{
+    ds_id:ID!
+    d_id:ID!
+    s_id:ID!
+  }
+
 
   type Query { 
     hello:String
@@ -88,6 +100,10 @@ const typeDefs = gql`
     addAppointment(d_id:ID!,p_id:ID!,c_id:ID!,slot:String!,success:Boolean!):Appointment
     cancelAppointment(id:ID!): Appointment
     addReview(d_id:ID!,p_id:ID!,patientName:String!,speciality:String!,rating:Int!,visitReason:String!,content:String!):Review
+    addDoctor(name:String!,fee:Int!,experience:Int!,image_url:String):Doctor
+    addClinic(name:String!,address:String!,city:String!):Clinic
+    addDoctorClinic(d_id:ID!,c_id:ID!):DoctorClinic
+    addDoctorSpecialisation(d_id:ID!,s_id:ID!):DoctorSpecialisation
   }
 
 `;

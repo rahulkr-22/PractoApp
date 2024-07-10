@@ -178,7 +178,37 @@ const resolvers={
             d_id,p_id,patientName,speciality,
             rating,visitReason,content
           }         
-        }
+        },
+        addDoctor:async(_,{name,fee,experience,image_url})=>{
+          const [rows]=await pool.query('INSERT INTO doctor (name,fee,experience,image_url) VALUES (?,?,?,?)',[name,fee,experience,image_url]);
+          return {
+            id:rows.insertId,
+            name,fee,experience,image_url      
+          }
+        },
+        addClinic:async(_,{name,address,city})=>{
+          const [rows]=await pool.query('INSERT INTO clinic (name,address,city) VALUES (?,?,?)',[name,address,city]);
+          return {
+            id:rows.insertId,
+            name,address,city
+
+          }
+        },
+        addDoctorClinic:async(_,{d_id,c_id})=>{
+          const [rows]=await pool.query('INSERT INTO doctor_clinic (d_id,c_id) VALUES (?,?)',[d_id,c_id]);
+          return {
+            dc_id:rows.insertId,
+            d_id,c_id
+          }
+        },
+        addDoctorSpecialisation:async(_,{d_id,s_id})=>{
+          const [rows]=await pool.query('INSERT INTO doctor_specialisation (d_id,s_id) VALUES (?,?)',[d_id,s_id]);
+          return {
+            ds_id:rows.insertId,
+            d_id,s_id
+          }
+        },
+
 
     }
 }
