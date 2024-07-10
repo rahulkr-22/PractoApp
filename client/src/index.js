@@ -8,10 +8,10 @@ import { Toaster } from 'react-hot-toast';
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import store from './redux/store';
 
-
+const API_END_POINT="http://localhost:8000";
 
 export const client=new ApolloClient({
-  uri:'http://localhost:8000/graphql',
+  uri:`${API_END_POINT}/graphql`,
   cache: new InMemoryCache()
 })
 

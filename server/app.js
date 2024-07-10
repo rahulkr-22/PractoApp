@@ -30,7 +30,7 @@ const start = async () => {
       
       server.applyMiddleware({ app });
 
-      app.listen({ port: 8000 }, () =>
+      app.listen({ port: process.env.PORT }, () =>
         console.log(`Server ready at http://localhost:8000${server.graphqlPath}`)
       );
     } catch (err) {
