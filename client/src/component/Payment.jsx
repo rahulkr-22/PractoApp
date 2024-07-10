@@ -7,7 +7,7 @@ import { CREATE_PAYMENT_INTENT } from '../utils/queries';
 import { client } from '..';
 import { STRIPE_KEY } from '../utils/secret';
 
-const stripePromise = loadStripe(STRIPE_KEY);
+const stripePromise = loadStripe('pk_test_51NlOhRSEekknxcXvVcTFOuipmh3dAq4ZuLhojfy1ARIyOVkV94RON9pXEKUhaDbVHDmXpenRHjEMOYm1kfg5bTjf00vxsMXbCR');
 
 export default function Payment() {
   const [clientSecret, setClientSecret] = useState("");
