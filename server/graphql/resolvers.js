@@ -85,6 +85,7 @@ const resolvers={
                 clientSecret: paymentIntent.client_secret
               };
             } catch (error) {
+              console.log(process.env.STRIPE_SECRET_KEY)
               //console.error('Error creating payment intent:', error);
               throw new Error('Failed to create payment intent');
             }
