@@ -99,7 +99,7 @@ const DoctorProfile = () => {
           console.error('Error fetching reviews:', error);
           setLoading(false);
         });
-        if(clinic) setSelectedId(clinic[0].id)
+      
     }
     else {
       setLoading(false);
@@ -176,6 +176,7 @@ const DoctorProfile = () => {
               <ul className='divide-y-2 divide-sky-100 p-2'>
                 <p className='text-center text-gray-600 font-semibold'>select clinic</p>
                 {(clinic && clinic.map((cl) => {
+                  {selectId===0 && setSelectedId(cl.id)}
                   return (      
                     <div className='flex flex-row items-center gap-2'> 
                       {selectId===cl.id?(<IoIosCheckbox onClick={()=>setSelectedId(cl.id)} className='text-2xl text-sky-600 hover:cursor-pointer'/>):

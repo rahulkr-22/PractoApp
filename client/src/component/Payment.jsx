@@ -11,15 +11,16 @@ const stripePromise = loadStripe(STRIPE_KEY);
 
 export default function Payment() {
   const [clientSecret, setClientSecret] = useState("");
-  const {fee}=useSelector(state=>state.appointment);
+  // const {fee}=useSelector(state=>state.appointment);
   const {id}=useSelector(state=>state.user);
+  const bookData=JSON.parse(localStorage.getItem('book'));
   
 
   useEffect(() => {
    
     client.mutate({
       mutation: CREATE_PAYMENT_INTENT,
-      variables: { amount: fee*100 }
+      variables: { amount: bookData.fee*100 }
     })
     .then(result => {
       setClientSecret(result.data.createPaymentIntent.clientSecret);

@@ -3,13 +3,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setTime } from '../redux/appointmentSlice';
 import { client } from '..';
-import { BOOKED_SLOTS } from '../utils/queries';
-import { ADD_APPOINTMENT, GET_DOCTOR } from '../utils/queries';
+import { BOOKED_SLOTS, CLINIC_DETAIL, GET_CLINIC } from '../utils/queries';
+import { GET_DOCTOR } from '../utils/queries';
 import { setDoctorId, setDoctorImg, setDoctorName, setFee } from '../redux/appointmentSlice';
 import Header from './Header';
 
 const BookClinic = () => {
-
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate(); 
@@ -36,6 +35,22 @@ const BookClinic = () => {
     .catch(error => {
       console.error('Error fetching doctor:', error);
     });
+
+    client.query({
+      query: CLINIC_DETAIL,
+      variables: { id: JSON.parse(localStorage.getItem('clinicId'))},
+    })
+    .then(result => {
+      if (result.data && result.data.clinic) {
+        setClinicInfo(result.data.clinic);
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching clinic:', error);
+    });
+
+
+
   }, [id]);
 
   useEffect(() => {
@@ -53,19 +68,6 @@ const BookClinic = () => {
     });
   }, [id]);
 
-  const addAppointmentFunc = async () => {
-    let appointment = null;
-    try {
-      const result = await client.mutate({
-        mutation: ADD_APPOINTMENT,
-        variables: { d_id: parseInt(id), p_id: parseInt(userData.id), slot: selectedSlot, success: true },
-      });
-      appointment = result.data.addAppointment;
-    } catch (error) {
-      console.log(error);
-    }
-    return appointment;
-  };
   const getIndianTime = () => {
     const options = {
       hour: '2-digit',
@@ -151,21 +153,14 @@ const BookClinic = () => {
         alert('Please select a time slot and ensure the doctor information is loaded.');
         return;
       }
-  
-      const appointment = await addAppointmentFunc();
-  
-      if (!appointment) {
-        alert('Error creating appointment. Please try again.');
-        return;
-      }
-  
+
+      
       const book = {
         doctorId: parseInt(id),
-        clinicId:localStorage.get('clinicId'),
+        clinicId:localStorage.getItem('clinicId'),
         doctorName: doctor.name,
         fee: doctor.fee,
         image_url: doctor.image_url,
-        appointmentNumber: appointment.id,
       };
       localStorage.setItem('book', JSON.stringify(book));
       dispatch(setDoctorId(parseInt(id)));
@@ -186,10 +181,10 @@ const BookClinic = () => {
     <div className="container mx-auto mt-8 p-4">
       <div className="max-w-xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
         <div className="p-4 bg-sky-100 text-black-800">
-          <h2 className="text-lg font-bold text-center text-gray-700 mt-4">Clinic Appointment</h2>
+          <h2 className="text-2xl font-bold text-center text-gray-700 mt-4">Clinic Appointment</h2>
           <div className="mt-2">
             <h3 className="text-lg font-semibold text-gray-600">{clinicInfo.name}</h3>
-            <p className="text-sm text-gray-500">{clinicInfo.address}, {clinicInfo.city}</p>
+            <p className="text-md text-gray-500">{clinicInfo.address}, {clinicInfo.city}</p>
           </div>
         </div>
         <div className="p-4">

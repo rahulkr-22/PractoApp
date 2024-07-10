@@ -67,7 +67,8 @@ const resolvers={
           return rows;
         },
         appointmentByPatient: async(_,{p_id})=>{
-          const [rows]=await pool.query('SELECT id,d_id,p_id,c_id,slot,success FROM appointment WHERE p_id = ?',[p_id])
+          const [rows]=await pool.query(
+            'SELECT MIN(id) as id, d_id, p_id, c_id, slot, success FROM appointment WHERE p_id = ? GROUP BY d_id, p_id, c_id, slot, success',[p_id])
           return rows;
         }
     },

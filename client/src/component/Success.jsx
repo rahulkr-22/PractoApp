@@ -1,11 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useSelector, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Checkmark } from 'react-checkmark';
+import { ADD_APPOINTMENT } from '../utils/queries';
+import { client } from '..';
 
 const PaymentSuccess = () => {
   const navigate = useNavigate();
+  const bookData=JSON.parse(localStorage.getItem('book'))
+  const userData = JSON.parse(localStorage.getItem('user'));
+  const [appId,setAppId]=useState(13);
+  const clinicId=bookData.clinicId;
+  const slotTime=localStorage.getItem('slotTime')
+
 
   useEffect(() => {
+
+    client.mutate({
+      mutation: ADD_APPOINTMENT,
+      variables: { d_id: bookData.doctorId, p_id:userData.id,c_id:clinicId, slot: slotTime, success: true },
+    }).then((result)=>{
+      setAppId(result?.data?.addAppointment?.id)
+    }).catch((error)=>{
+      console.log(error)
+    })
+
+    localStorage.setItem('appNum',appId);
     const timer = setTimeout(() => {
       navigate('/appointment/status');
     }, 3000);

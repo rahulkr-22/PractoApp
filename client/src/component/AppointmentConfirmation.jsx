@@ -15,11 +15,12 @@ const Card = () => {
     const timeSlot = localStorage.getItem('slotTime');
     const userData = useSelector(state => state.user?.user);
     const bookData = JSON.parse(localStorage.getItem('book'));
+    const appointmentNumber=JSON.parse(localStorage.getItem('appNum'))
 
     const handleClickCancel = async () => {
         await client.mutate({
             mutation: CANCEL_APPOINTMENT,
-            variables: { id: parseInt(bookData.appointmentNumber) }
+            variables: { id: parseInt(appointmentNumber) }
         })
             .then((result) => {
                 toast.success('Your appointment is cancelled.');
@@ -77,7 +78,7 @@ const Card = () => {
                 </div>
                 <div className='ml-4 flex flex-col gap-y-2 mt-4'>
                     <div>
-                        <p className='text-gray-800'>Your appointment ID is {bookData.appointmentNumber}</p>
+                        <p className='text-gray-800'>Your appointment ID is {appointmentNumber}</p>
                         <p>We have sent you an SMS with the details.</p>
                     </div>
                     <div>

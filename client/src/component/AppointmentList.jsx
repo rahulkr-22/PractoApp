@@ -40,8 +40,6 @@ const AppointmentList = () => {
 
   }, [userData]);
 
-  console.log(userData);
-  console.log(appointments);
 
   return (
     <div>

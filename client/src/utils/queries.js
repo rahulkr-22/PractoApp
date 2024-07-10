@@ -63,11 +63,12 @@ export const CREATE_PAYMENT_INTENT = gql`
 `;
 
 export const ADD_APPOINTMENT=gql`
-mutation($d_id: ID!, $p_id: ID!, $slot: String!, $success: Boolean!){
-    addAppointment(d_id: $d_id, p_id: $p_id, slot: $slot, success: $success) {
+mutation($d_id: ID!, $p_id: ID!,$c_id:ID! $slot: String!, $success: Boolean!){
+    addAppointment(d_id: $d_id, p_id: $p_id,c_id:$c_id slot: $slot, success: $success) {
         id
         p_id
         d_id
+        c_id
         slot
         success
     }
@@ -157,6 +158,7 @@ query($p_id: ID!){
     id
     d_id
     p_id
+    c_id
     slot
     success
   }
@@ -166,6 +168,16 @@ export const GET_USER_BY_EMAIL=gql`
 query($email: String!){
   userByEmail(email: $email) {
     id
+  }
+}
+`
+export const CLINIC_DETAIL=gql`
+query($id:ID!){
+  clinic(id:$id){
+    id
+    name
+    address
+    city
   }
 }
 `

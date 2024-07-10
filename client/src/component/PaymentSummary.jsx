@@ -5,6 +5,8 @@ import Header from './Header';
 import { IoMdCalendar } from "react-icons/io";
 import { FiClock } from "react-icons/fi";
 import { BiClinic } from "react-icons/bi";
+import { CLINIC_DETAIL, DOCTOR_SPECIALITY } from '../utils/queries';
+import { client } from '..';
 
 
 const Card = () => {
@@ -13,6 +15,40 @@ const Card = () => {
   const timeSlot=localStorage.getItem('slotTime');
   const userData = useSelector(state => state.user?.user);
   const bookData = JSON.parse(localStorage.getItem('book'));
+  const [specialities, setSpecialities] = useState([]);
+  const [clinicInfo, setClinicInfo] = useState({
+    name: 'Relief Clinic',
+    address: 'HSR Layout',
+    city:'Bangalore'
+  });
+
+  useEffect(()=>{
+    client.query({
+        query: CLINIC_DETAIL,
+        variables: { id: JSON.parse(localStorage.getItem('clinicId'))},
+      })
+      .then(result => {
+        if (result.data && result.data.clinic) {
+          setClinicInfo(result.data.clinic);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching clinic:', error);
+      });
+
+      client.query({
+        query: DOCTOR_SPECIALITY,
+        variables: { d_id: bookData.doctorId },
+      })
+        .then(result => {
+          if (result.data && result.data.doctorSpeciality) {
+            setSpecialities(result.data.doctorSpeciality.map(spec => spec.name));
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching doctor speciality:', error);
+        });
+  },[])
 
   const getTodayDate=()=>{
     const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Kolkata' };
@@ -21,6 +57,7 @@ const Card = () => {
     const formattedDate = date.toLocaleDateString(indiaLocale, options);
     return formattedDate;
   }
+
 
   const handlePayment = () => {
       navigate('/payment');
@@ -42,16 +79,14 @@ const Card = () => {
                   <img className='w-24 h-24' src={bookData.image_url} />
                   <div className='ml-10'>
                       <p className='font-semibold'>{bookData.doctorName}</p>
-                      <p>BDS, MDS - Orthodontics
-                          Orthodontist, Implantologist, Dentist, Dental Surgeon</p></div>
+                      <p >{specialities.slice(0, 5).join(', ')}</p></div>
               </div>
-              <div className='flex flex-row justify-around p-4'>
+              <div className='flex flex-row justify-around p-2 gap-16'>
                   <img className='w-24 h-24' src='https://images1-fabric.practo.com/practices/1163292/excel-dental-care-bangalore-5a03f54887a09.jpeg' />
-                  <div>
-                      <p className='ml-3 font-semibold'>Relief Clinic</p>
-                      <div className='ml-3'>884, 19th Main, 39th Cross, Jayanagar 4th T Block, Bangalore</div>
+                  <div className='flex flex-col justify-center items-center mr-16'>
+                      <p className=' font-semibold text-gray-700'>{clinicInfo.name}</p>
+                      <div className=' font-md text-gray-600'>{clinicInfo.address}, {clinicInfo.city}</div>
                   </div>
-
               </div>
           </div>
           <div className='flex flex-col justify-start gap-4 ml-20 p-2 text-gray-700 text-xl'>
